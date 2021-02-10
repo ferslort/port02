@@ -1,12 +1,34 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StatusBar } from "expo-status-bar";
+import React, { useState } from "react";
+import { StyleSheet, View } from "react-native";
+import { COLORS } from "./App/constants";
+import Navigation from "./App/screens/Navigation";
+import * as Fonts from "expo-font";
+import AppLoading from "expo-app-loading";
 
 export default function App() {
+  const [load, setLoad] = useState(false);
+
+  const fetchFonts = Fonts.loadAsync({
+    robotoBlack: require("./assets/fonts/Roboto-Black.ttf"),
+    robotoBold: require("./assets/fonts/Roboto-Bold.ttf"),
+    robotoMedium: require("./assets/fonts/Roboto-Medium.ttf"),
+    robotoLight: require("./assets/fonts/Roboto-Light.ttf"),
+  });
+
+  if (!load) {
+    return (
+      <AppLoading
+        startAsync={() => fetchFonts}
+        onFinish={() => setLoad(true)}
+        onError={(error) => console.log(error)}
+      />
+    );
+  }
+
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+      <Navigation />
     </View>
   );
 }
@@ -14,8 +36,6 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: COLORS.white,
   },
 });
